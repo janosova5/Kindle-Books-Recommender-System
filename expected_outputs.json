@@ -1,0 +1,52 @@
+{
+  "cases": [
+    {
+      "liked_asins": ["DEMO-001"],
+      "model": "popularity",
+      "expected": [
+        {"parent_asin": "DEMO-025", "title": "When the Bells Turn Blue", "author": "Morgan Lake", "genre": "Drama", "score": 10.0},
+        {"parent_asin": "DEMO-014", "title": "Where the River Sleeps", "author": "Jamie Brook", "genre": "Drama", "score": 9.0},
+        {"parent_asin": "DEMO-015", "title": "The Umbrella Detective", "author": "Morgan Lake", "genre": "Mystery", "score": 8.0},
+        {"parent_asin": "DEMO-027", "title": "Cloudkeeper's Journey", "author": "Taylor Ash", "genre": "Fantasy", "score": 7.0},
+        {"parent_asin": "DEMO-022", "title": "Dreams of the Silver Fox", "author": "Robin Vale", "genre": "Fantasy", "score": 6.0},
+        {"parent_asin": "DEMO-030", "title": "Across the Violet Sea", "author": "Riley West", "genre": "Adventure", "score": 5.0},
+        {"parent_asin": "DEMO-023", "title": "A Rocket for Two", "author": "Sam Rowan", "genre": "Comedy", "score": 4.0},
+        {"parent_asin": "DEMO-019", "title": "The Amber Compass", "author": "Avery Stone", "genre": "Adventure", "score": 3.0},
+        {"parent_asin": "DEMO-002", "title": "The Clockwork Garden", "author": "Robin Vale", "genre": "Fantasy", "score": 2.0},
+        {"parent_asin": "DEMO-026", "title": "The Secret of Maple Lane", "author": "Casey Hart", "genre": "Mystery", "score": 1.0}
+      ]
+    },
+    {
+      "liked_asins": ["DEMO-002", "DEMO-003"],
+      "model": "itemknn",
+      "expected": [
+        {"parent_asin": "DEMO-001", "title": "Moonlit Harbor", "author": "Alex Reed", "genre": "Mystery", "score": 10.0},
+        {"parent_asin": "DEMO-012", "title": "The Pancake Expedition", "author": "Robin Vale", "genre": "Comedy", "score": 9.0},
+        {"parent_asin": "DEMO-009", "title": "Midnight at Cedar Station", "author": "Avery Stone", "genre": "Mystery", "score": 8.0},
+        {"parent_asin": "DEMO-004", "title": "Letters from Willow Bay", "author": "Jamie Brook", "genre": "Drama", "score": 7.0},
+        {"parent_asin": "DEMO-018", "title": "Footprints on Saturn", "author": "Jordan Pine", "genre": "Sci-Fi", "score": 6.0},
+        {"parent_asin": "DEMO-010", "title": "The Quiet Orchestra", "author": "Riley West", "genre": "Drama", "score": 5.0},
+        {"parent_asin": "DEMO-007", "title": "Echoes of the Glass Mountain", "author": "Taylor Ash", "genre": "Fantasy", "score": 4.0},
+        {"parent_asin": "DEMO-005", "title": "The Last Paper Train", "author": "Morgan Lake", "genre": "Adventure", "score": 3.0},
+        {"parent_asin": "DEMO-025", "title": "When the Bells Turn Blue", "author": "Morgan Lake", "genre": "Drama", "score": 2.0},
+        {"parent_asin": "DEMO-008", "title": "A Map of Tomorrow", "author": "Jordan Pine", "genre": "Sci-Fi", "score": 1.0}
+      ]
+    },
+    {
+      "liked_asins": ["DEMO-004", "DEMO-005", "DEMO-006"],
+      "model": "als",
+      "expected": [
+        {"parent_asin": "DEMO-008", "title": "A Map of Tomorrow", "author": "Jordan Pine", "genre": "Sci-Fi", "score": 10.0},
+        {"parent_asin": "DEMO-026", "title": "The Secret of Maple Lane", "author": "Casey Hart", "genre": "Mystery", "score": 9.0},
+        {"parent_asin": "DEMO-017", "title": "The Unlikely Lighthouse", "author": "Taylor Ash", "genre": "Comedy", "score": 8.0},
+        {"parent_asin": "DEMO-010", "title": "The Quiet Orchestra", "author": "Riley West", "genre": "Drama", "score": 7.0},
+        {"parent_asin": "DEMO-029", "title": "The Bicycle Parliament", "author": "Avery Stone", "genre": "Comedy", "score": 6.0},
+        {"parent_asin": "DEMO-023", "title": "A Rocket for Two", "author": "Sam Rowan", "genre": "Comedy", "score": 5.0},
+        {"parent_asin": "DEMO-022", "title": "Dreams of the Silver Fox", "author": "Robin Vale", "genre": "Fantasy", "score": 4.0},
+        {"parent_asin": "DEMO-007", "title": "Echoes of the Glass Mountain", "author": "Taylor Ash", "genre": "Fantasy", "score": 3.0},
+        {"parent_asin": "DEMO-018", "title": "Footprints on Saturn", "author": "Jordan Pine", "genre": "Sci-Fi", "score": 2.0},
+        {"parent_asin": "DEMO-011", "title": "Seven Clouds to Home", "author": "Alex Reed", "genre": "Adventure", "score": 1.0}
+      ]
+    }
+  ]
+}
