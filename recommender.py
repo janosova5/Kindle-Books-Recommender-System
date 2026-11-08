@@ -1,90 +1,89 @@
-"""Temporary deterministic demo backend; replace with the supplied recommender."""
-
+"""Kindle book recommender: loads the trained artifacts and returns top-k books."""
+import json
 from functools import lru_cache
-import hashlib
 from pathlib import Path
-import random
 
+import numpy as np
 import pandas as pd
+import scipy.sparse as sp
 
-
-IS_DEMO = True
-DEMO_BOOKS = [
-    ("Moonlit Harbor", "Alex Reed", "Mystery"),
-    ("The Clockwork Garden", "Robin Vale", "Fantasy"),
-    ("Beyond the Copper Sky", "Sam Rowan", "Sci-Fi"),
-    ("Letters from Willow Bay", "Jamie Brook", "Drama"),
-    ("The Last Paper Train", "Morgan Lake", "Adventure"),
-    ("Summer on Lantern Street", "Casey Hart", "Comedy"),
-    ("Echoes of the Glass Mountain", "Taylor Ash", "Fantasy"),
-    ("A Map of Tomorrow", "Jordan Pine", "Sci-Fi"),
-    ("Midnight at Cedar Station", "Avery Stone", "Mystery"),
-    ("The Quiet Orchestra", "Riley West", "Drama"),
-    ("Seven Clouds to Home", "Alex Reed", "Adventure"),
-    ("The Pancake Expedition", "Robin Vale", "Comedy"),
-    ("Orbit of the Blue Kite", "Sam Rowan", "Sci-Fi"),
-    ("Where the River Sleeps", "Jamie Brook", "Drama"),
-    ("The Umbrella Detective", "Morgan Lake", "Mystery"),
-    ("A Castle Made of Rain", "Casey Hart", "Fantasy"),
-    ("The Unlikely Lighthouse", "Taylor Ash", "Comedy"),
-    ("Footprints on Saturn", "Jordan Pine", "Sci-Fi"),
-    ("The Amber Compass", "Avery Stone", "Adventure"),
-    ("Spring behind the Window", "Riley West", "Drama"),
-    ("The Missing Tuesday", "Alex Reed", "Mystery"),
-    ("Dreams of the Silver Fox", "Robin Vale", "Fantasy"),
-    ("A Rocket for Two", "Sam Rowan", "Comedy"),
-    ("The Valley of Small Stars", "Jamie Brook", "Adventure"),
-    ("When the Bells Turn Blue", "Morgan Lake", "Drama"),
-    ("The Secret of Maple Lane", "Casey Hart", "Mystery"),
-    ("Cloudkeeper's Journey", "Taylor Ash", "Fantasy"),
-    ("The Far Side of Morning", "Jordan Pine", "Sci-Fi"),
-    ("The Bicycle Parliament", "Avery Stone", "Comedy"),
-    ("Across the Violet Sea", "Riley West", "Adventure"),
-]
-
-
-def demo_catalog() -> pd.DataFrame:
-    return pd.DataFrame(
-        [
-            {
-                "parent_asin": f"DEMO-{index:03}",
-                "title": title,
-                "author": author,
-                "genre": genre,
-            }
-            for index, (title, author, genre) in enumerate(DEMO_BOOKS, 1)
-        ]
-    )
+ART = Path(__file__).resolve().parent / "artifacts"
+MODELS = ("popularity", "itemknn", "als")
+MAX_LIKED = 10
 
 
 @lru_cache(maxsize=1)
-def _catalog() -> list[dict]:
-    path = Path(__file__).resolve().parent / "artifacts" / "catalog.parquet"
-    return pd.read_parquet(path).to_dict("records")
+def _load():
+    cat = pd.read_parquet(ART / "catalog.parquet")
+    cat = cat.fillna({"title": "Unknown title", "author": "Unknown author", "genre": "Unknown genre"})
+    params = json.loads((ART / "model_params.json").read_text())
+    pop = json.loads((ART / "popularity.json").read_text())
+    sim = sp.load_npz(ART / "itemknn_sim.npz").tocsr()
+    Y = np.load(ART / "als_item_factors.npy").astype(np.float64)
+    index = {a: i for i, a in enumerate(cat["parent_asin"])}
+    return cat, params, pop, sim, Y, index
 
 
-def recommend(liked_asins: list[str], model: str, k: int = 10) -> list[dict]:
-    if model not in {"popularity", "itemknn", "als"}:
-        raise ValueError("Unknown demo generator")
-    if k < 1:
-        raise ValueError("k must be positive")
-    selected = set(liked_asins)
-    catalog = _catalog()
-    if not selected.issubset({movie["parent_asin"] for movie in catalog}):
-        raise ValueError("Selected book is not in the demo catalog")
-    candidates = [book for book in catalog if book["parent_asin"] not in selected]
-    seed_input = model + "|" + "|".join(sorted(selected))
-    seed = int.from_bytes(hashlib.sha256(seed_input.encode("utf-8")).digest(), "big")
-    rng = random.Random(seed)
-    count = min(k, len(candidates))
-    if model == "popularity":
-        chosen = rng.sample(candidates, count)
-    elif model == "itemknn":
-        rng.shuffle(candidates)
-        chosen = candidates[:count]
+def search(text, limit=20):
+    """Books whose title or author contains the text (case-insensitive)."""
+    cat = _load()[0]
+    t = str(text).strip().lower()
+    if not t:
+        return []
+    hit = cat["title"].fillna("").str.lower().str.contains(t, regex=False) | \
+          cat["author"].fillna("").str.lower().str.contains(t, regex=False)
+    return cat[hit].head(limit).to_dict("records")
+
+
+def recommend(liked_asins, model="als", k=10):
+    """Return k recommended books (list of dicts) for the books the user liked.
+
+    Raises ValueError for an unknown model, an empty or too long selection, or books not in the catalogue.
+    If a model cannot score any book, the most popular books are returned with fallback=True.
+    """
+    if model not in MODELS:
+        raise ValueError(f"Unknown model '{model}'. Choose one of {MODELS}.")
+    if not isinstance(k, int) or not 1 <= k <= 50:
+        raise ValueError("k must be an integer between 1 and 50.")
+    cat, params, pop, sim, Y, index = _load()
+    liked = list(dict.fromkeys(liked_asins or []))          # remove duplicates, keep order
+    if not liked:
+        raise ValueError("Select at least one book.")
+    if len(liked) > MAX_LIKED:
+        raise ValueError(f"Select at most {MAX_LIKED} books.")
+    unknown = [a for a in liked if a not in index]
+    if unknown:
+        raise ValueError(f"Books not in the catalogue: {unknown}")
+    li = np.array([index[a] for a in liked])
+
+    scores = None
+    if model == "itemknn":
+        s = np.asarray(sim[li].sum(axis=0)).ravel().astype(np.float64)
+        scores = s if (s > 0).any() else None
+    elif model == "als":
+        lam, alpha = params["als"]["regularization"], params["als"]["alpha"]
+        A = Y.T @ Y + lam * np.eye(Y.shape[1]) + (alpha - 1) * Y[li].T @ Y[li]
+        u = np.linalg.solve(A, alpha * Y[li].sum(axis=0))
+        scores = Y @ u
+
+    fallback = scores is None and model != "popularity"
+    if scores is None:
+        order = [index[a] for a in pop]
+        score_of = {i: float(len(pop) - r) for r, i in enumerate(order)}
     else:
-        chosen = sorted(candidates, key=lambda book: rng.random())[:count]
-    return [
-        {**book, "score": float(len(chosen) - rank)}
-        for rank, book in enumerate(chosen)
-    ]
+        scores[li] = -np.inf
+        order = np.argsort(-scores, kind="stable")
+        score_of = None
+    liked_set = set(li.tolist())
+    out = []
+    for i in order:
+        i = int(i)
+        if i in liked_set:
+            continue
+        row = cat.iloc[i]
+        out.append({"rank": len(out) + 1, "parent_asin": row["parent_asin"], "title": row["title"],
+                    "author": row["author"], "genre": row["genre"],
+                    "score": score_of[i] if score_of else float(scores[i]), "fallback": fallback})
+        if len(out) == k:
+            break
+    return out

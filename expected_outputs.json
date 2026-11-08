@@ -1,51 +1,717 @@
 {
   "cases": [
     {
-      "liked_asins": ["DEMO-001"],
+      "liked_asins": [
+        "B09C6LW4XW",
+        "B09TWSRMCB",
+        "B098PW8NP8"
+      ],
       "model": "popularity",
       "expected": [
-        {"parent_asin": "DEMO-025", "title": "When the Bells Turn Blue", "author": "Morgan Lake", "genre": "Drama", "score": 10.0},
-        {"parent_asin": "DEMO-014", "title": "Where the River Sleeps", "author": "Jamie Brook", "genre": "Drama", "score": 9.0},
-        {"parent_asin": "DEMO-015", "title": "The Umbrella Detective", "author": "Morgan Lake", "genre": "Mystery", "score": 8.0},
-        {"parent_asin": "DEMO-027", "title": "Cloudkeeper's Journey", "author": "Taylor Ash", "genre": "Fantasy", "score": 7.0},
-        {"parent_asin": "DEMO-022", "title": "Dreams of the Silver Fox", "author": "Robin Vale", "genre": "Fantasy", "score": 6.0},
-        {"parent_asin": "DEMO-030", "title": "Across the Violet Sea", "author": "Riley West", "genre": "Adventure", "score": 5.0},
-        {"parent_asin": "DEMO-023", "title": "A Rocket for Two", "author": "Sam Rowan", "genre": "Comedy", "score": 4.0},
-        {"parent_asin": "DEMO-019", "title": "The Amber Compass", "author": "Avery Stone", "genre": "Adventure", "score": 3.0},
-        {"parent_asin": "DEMO-002", "title": "The Clockwork Garden", "author": "Robin Vale", "genre": "Fantasy", "score": 2.0},
-        {"parent_asin": "DEMO-026", "title": "The Secret of Maple Lane", "author": "Casey Hart", "genre": "Mystery", "score": 1.0}
+        {
+          "parent_asin": "B09H6T8LTR",
+          "title": "Verity",
+          "author": "Colleen Hoover",
+          "genre": "Mystery, Thriller & Suspense",
+          "score": 97.0
+        },
+        {
+          "parent_asin": "B0976V6YSL",
+          "title": "Reminders of Him: A Novel",
+          "author": "Colleen Hoover",
+          "genre": "Literature & Fiction",
+          "score": 96.0
+        },
+        {
+          "parent_asin": "B09GFD7XCX",
+          "title": "Odin (Alex Mason Book 1)",
+          "author": "Blake Banner",
+          "genre": "Literature & Fiction",
+          "score": 95.0
+        },
+        {
+          "parent_asin": "B09PNM8FFN",
+          "title": "Things We Never Got Over (Knockemout Book 1)",
+          "author": "Lucy Score",
+          "genre": "Literature & Fiction",
+          "score": 94.0
+        },
+        {
+          "parent_asin": "B078GD3DRG",
+          "title": "Where the Crawdads Sing",
+          "author": "Delia Owens",
+          "genre": "Literature & Fiction",
+          "score": 93.0
+        },
+        {
+          "parent_asin": "B0176M3U10",
+          "title": "It Ends with Us: A Novel",
+          "author": "Colleen Hoover",
+          "genre": "Literature & Fiction",
+          "score": 92.0
+        },
+        {
+          "parent_asin": "B0B1XQTZ1R",
+          "title": "The Inmate: A gripping psychological thriller",
+          "author": "Unknown author",
+          "genre": "Literature & Fiction",
+          "score": 91.0
+        },
+        {
+          "parent_asin": "B07Q5TL9SQ",
+          "title": "If You Tell: A True Story of Murder, Family Secrets, and the Unbreakable Bond of Sisterhood",
+          "author": "Gregg Olsen",
+          "genre": "Biographies & Memoirs",
+          "score": 90.0
+        },
+        {
+          "parent_asin": "B07YBTCMPH",
+          "title": "The Perfect Son: A gripping psychological thriller with a breathtaking twist",
+          "author": "Freida McFadden",
+          "genre": "Literature & Fiction",
+          "score": 89.0
+        },
+        {
+          "parent_asin": "B07YL45VW2",
+          "title": "The Clause in Christmas (A Poppy Creek Novel Book 1)",
+          "author": "Rachael Bloome",
+          "genre": "Literature & Fiction",
+          "score": 88.0
+        }
       ]
     },
     {
-      "liked_asins": ["DEMO-002", "DEMO-003"],
+      "liked_asins": [
+        "B09C6LW4XW",
+        "B09TWSRMCB",
+        "B098PW8NP8"
+      ],
       "model": "itemknn",
       "expected": [
-        {"parent_asin": "DEMO-001", "title": "Moonlit Harbor", "author": "Alex Reed", "genre": "Mystery", "score": 10.0},
-        {"parent_asin": "DEMO-012", "title": "The Pancake Expedition", "author": "Robin Vale", "genre": "Comedy", "score": 9.0},
-        {"parent_asin": "DEMO-009", "title": "Midnight at Cedar Station", "author": "Avery Stone", "genre": "Mystery", "score": 8.0},
-        {"parent_asin": "DEMO-004", "title": "Letters from Willow Bay", "author": "Jamie Brook", "genre": "Drama", "score": 7.0},
-        {"parent_asin": "DEMO-018", "title": "Footprints on Saturn", "author": "Jordan Pine", "genre": "Sci-Fi", "score": 6.0},
-        {"parent_asin": "DEMO-010", "title": "The Quiet Orchestra", "author": "Riley West", "genre": "Drama", "score": 5.0},
-        {"parent_asin": "DEMO-007", "title": "Echoes of the Glass Mountain", "author": "Taylor Ash", "genre": "Fantasy", "score": 4.0},
-        {"parent_asin": "DEMO-005", "title": "The Last Paper Train", "author": "Morgan Lake", "genre": "Adventure", "score": 3.0},
-        {"parent_asin": "DEMO-025", "title": "When the Bells Turn Blue", "author": "Morgan Lake", "genre": "Drama", "score": 2.0},
-        {"parent_asin": "DEMO-008", "title": "A Map of Tomorrow", "author": "Jordan Pine", "genre": "Sci-Fi", "score": 1.0}
+        {
+          "parent_asin": "B0B1XQTZ1R",
+          "title": "The Inmate: A gripping psychological thriller",
+          "author": "Unknown author",
+          "genre": "Literature & Fiction",
+          "score": 0.2837985157966614
+        },
+        {
+          "parent_asin": "B09NGQ7BJ5",
+          "title": "Do You Remember?: A gripping psychological thriller",
+          "author": "Freida McFadden",
+          "genre": "Literature & Fiction",
+          "score": 0.22121013700962067
+        },
+        {
+          "parent_asin": "B092RXXJDM",
+          "title": "The Locked Door: A gripping psychological thriller with a jaw-dropping twist",
+          "author": "Freida McFadden",
+          "genre": "Literature & Fiction",
+          "score": 0.21544760465621948
+        },
+        {
+          "parent_asin": "B07YBTCMPH",
+          "title": "The Perfect Son: A gripping psychological thriller with a breathtaking twist",
+          "author": "Freida McFadden",
+          "genre": "Literature & Fiction",
+          "score": 0.20671077072620392
+        },
+        {
+          "parent_asin": "B09CN5LBGK",
+          "title": "Do Not Disturb: An addictive psychological thriller",
+          "author": "Freida McFadden",
+          "genre": "Literature & Fiction",
+          "score": 0.2060021609067917
+        },
+        {
+          "parent_asin": "B08NP5273Y",
+          "title": "Want to Know a Secret?: A jaw-dropping psychological suspense thriller",
+          "author": "Unknown author",
+          "genre": "Literature & Fiction",
+          "score": 0.19338417053222656
+        },
+        {
+          "parent_asin": "B089XYQ8SH",
+          "title": "One By One: An unputdownable psychological thriller",
+          "author": "Freida McFadden",
+          "genre": "Literature & Fiction",
+          "score": 0.19020184874534607
+        },
+        {
+          "parent_asin": "B085BWPVFC",
+          "title": "The Wife Upstairs: A twisted psychological thriller that will keep you guessing",
+          "author": "Freida McFadden",
+          "genre": "Literature & Fiction",
+          "score": 0.18815700709819794
+        },
+        {
+          "parent_asin": "B07FKT7W1S",
+          "title": "The Surrogate Mother: An addictive psychological thriller",
+          "author": "Freida McFadden",
+          "genre": "Literature & Fiction",
+          "score": 0.1743926703929901
+        },
+        {
+          "parent_asin": "B07MHGG3L3",
+          "title": "The Ex: A mind-bending psychological thriller",
+          "author": "Freida McFadden",
+          "genre": "Literature & Fiction",
+          "score": 0.15609455108642578
+        }
       ]
     },
     {
-      "liked_asins": ["DEMO-004", "DEMO-005", "DEMO-006"],
+      "liked_asins": [
+        "B09C6LW4XW",
+        "B09TWSRMCB",
+        "B098PW8NP8"
+      ],
       "model": "als",
       "expected": [
-        {"parent_asin": "DEMO-008", "title": "A Map of Tomorrow", "author": "Jordan Pine", "genre": "Sci-Fi", "score": 10.0},
-        {"parent_asin": "DEMO-026", "title": "The Secret of Maple Lane", "author": "Casey Hart", "genre": "Mystery", "score": 9.0},
-        {"parent_asin": "DEMO-017", "title": "The Unlikely Lighthouse", "author": "Taylor Ash", "genre": "Comedy", "score": 8.0},
-        {"parent_asin": "DEMO-010", "title": "The Quiet Orchestra", "author": "Riley West", "genre": "Drama", "score": 7.0},
-        {"parent_asin": "DEMO-029", "title": "The Bicycle Parliament", "author": "Avery Stone", "genre": "Comedy", "score": 6.0},
-        {"parent_asin": "DEMO-023", "title": "A Rocket for Two", "author": "Sam Rowan", "genre": "Comedy", "score": 5.0},
-        {"parent_asin": "DEMO-022", "title": "Dreams of the Silver Fox", "author": "Robin Vale", "genre": "Fantasy", "score": 4.0},
-        {"parent_asin": "DEMO-007", "title": "Echoes of the Glass Mountain", "author": "Taylor Ash", "genre": "Fantasy", "score": 3.0},
-        {"parent_asin": "DEMO-018", "title": "Footprints on Saturn", "author": "Jordan Pine", "genre": "Sci-Fi", "score": 2.0},
-        {"parent_asin": "DEMO-011", "title": "Seven Clouds to Home", "author": "Alex Reed", "genre": "Adventure", "score": 1.0}
+        {
+          "parent_asin": "B09DXWBKD7",
+          "title": "The Girl I Was",
+          "author": "Jeneva Rose",
+          "genre": "Literature & Fiction",
+          "score": 0.2424923207623867
+        },
+        {
+          "parent_asin": "B0B1XQTZ1R",
+          "title": "The Inmate: A gripping psychological thriller",
+          "author": "Unknown author",
+          "genre": "Literature & Fiction",
+          "score": 0.2019604642768168
+        },
+        {
+          "parent_asin": "B09NGQ7BJ5",
+          "title": "Do You Remember?: A gripping psychological thriller",
+          "author": "Freida McFadden",
+          "genre": "Literature & Fiction",
+          "score": 0.18660280976646754
+        },
+        {
+          "parent_asin": "B08NP5273Y",
+          "title": "Want to Know a Secret?: A jaw-dropping psychological suspense thriller",
+          "author": "Unknown author",
+          "genre": "Literature & Fiction",
+          "score": 0.16550114251472092
+        },
+        {
+          "parent_asin": "B0176M3XWQ",
+          "title": "One True Loves: A Novel",
+          "author": "Taylor Jenkins Reid",
+          "genre": "Literature & Fiction",
+          "score": 0.163873918008926
+        },
+        {
+          "parent_asin": "B092RXXJDM",
+          "title": "The Locked Door: A gripping psychological thriller with a jaw-dropping twist",
+          "author": "Freida McFadden",
+          "genre": "Literature & Fiction",
+          "score": 0.15480516851486378
+        },
+        {
+          "parent_asin": "B09VXXGZLP",
+          "title": "Make Me Disappear: A twisty and gripping psychological thriller",
+          "author": "Jessica Payne",
+          "genre": "Literature & Fiction",
+          "score": 0.15351896918074698
+        },
+        {
+          "parent_asin": "B08RD8WFH9",
+          "title": "The World Played Chess: A Novel",
+          "author": "Robert Dugoni",
+          "genre": "Literature & Fiction",
+          "score": 0.15159817499989553
+        },
+        {
+          "parent_asin": "B09H6T8LTR",
+          "title": "Verity",
+          "author": "Colleen Hoover",
+          "genre": "Mystery, Thriller & Suspense",
+          "score": 0.14521243993143293
+        },
+        {
+          "parent_asin": "B091MQ9XHN",
+          "title": "The Spanish Daughter: A Gripping Historical Novel Perfect for Book Clubs",
+          "author": "Lorena Hughes",
+          "genre": "Literature & Fiction",
+          "score": 0.14201999184616293
+        }
+      ]
+    },
+    {
+      "liked_asins": [
+        "B01B6E6OKI",
+        "B09S181LRM",
+        "B07CGJGDPZ"
+      ],
+      "model": "popularity",
+      "expected": [
+        {
+          "parent_asin": "B09C6LW4XW",
+          "title": "The Perfect Marriage: A Completely Gripping Psychological Suspense",
+          "author": "Jeneva Rose",
+          "genre": "Literature & Fiction",
+          "score": 100.0
+        },
+        {
+          "parent_asin": "B09TWSRMCB",
+          "title": "The Housemaid: An absolutely addictive psychological thriller with a jaw-dropping twist",
+          "author": "Freida McFadden",
+          "genre": "Literature & Fiction",
+          "score": 99.0
+        },
+        {
+          "parent_asin": "B098PW8NP8",
+          "title": "Lessons in Chemistry: A Novel",
+          "author": "Bonnie Garmus",
+          "genre": "Literature & Fiction",
+          "score": 98.0
+        },
+        {
+          "parent_asin": "B09H6T8LTR",
+          "title": "Verity",
+          "author": "Colleen Hoover",
+          "genre": "Mystery, Thriller & Suspense",
+          "score": 97.0
+        },
+        {
+          "parent_asin": "B0976V6YSL",
+          "title": "Reminders of Him: A Novel",
+          "author": "Colleen Hoover",
+          "genre": "Literature & Fiction",
+          "score": 96.0
+        },
+        {
+          "parent_asin": "B09GFD7XCX",
+          "title": "Odin (Alex Mason Book 1)",
+          "author": "Blake Banner",
+          "genre": "Literature & Fiction",
+          "score": 95.0
+        },
+        {
+          "parent_asin": "B09PNM8FFN",
+          "title": "Things We Never Got Over (Knockemout Book 1)",
+          "author": "Lucy Score",
+          "genre": "Literature & Fiction",
+          "score": 94.0
+        },
+        {
+          "parent_asin": "B078GD3DRG",
+          "title": "Where the Crawdads Sing",
+          "author": "Delia Owens",
+          "genre": "Literature & Fiction",
+          "score": 93.0
+        },
+        {
+          "parent_asin": "B0176M3U10",
+          "title": "It Ends with Us: A Novel",
+          "author": "Colleen Hoover",
+          "genre": "Literature & Fiction",
+          "score": 92.0
+        },
+        {
+          "parent_asin": "B0B1XQTZ1R",
+          "title": "The Inmate: A gripping psychological thriller",
+          "author": "Unknown author",
+          "genre": "Literature & Fiction",
+          "score": 91.0
+        }
+      ]
+    },
+    {
+      "liked_asins": [
+        "B01B6E6OKI",
+        "B09S181LRM",
+        "B07CGJGDPZ"
+      ],
+      "model": "itemknn",
+      "expected": [
+        {
+          "parent_asin": "B09MWL523K",
+          "title": "Finding Yesterday: A Rom Com Mystery (Blue Vine Book 1)",
+          "author": "Terra Weiss",
+          "genre": "Literature & Fiction",
+          "score": 0.6228411197662354
+        },
+        {
+          "parent_asin": "B00K6NJZZ2",
+          "title": "Not Quite Forever",
+          "author": "Catherine Bybee",
+          "genre": "Literature & Fiction",
+          "score": 0.26481330394744873
+        },
+        {
+          "parent_asin": "B099WCRF29",
+          "title": "My Christmas Wish",
+          "author": "Jeannie Moon",
+          "genre": "Literature & Fiction",
+          "score": 0.2540002763271332
+        },
+        {
+          "parent_asin": "B074QNLKP9",
+          "title": "Not Quite Crazy",
+          "author": "Catherine Bybee",
+          "genre": "Literature & Fiction",
+          "score": 0.2402425855398178
+        },
+        {
+          "parent_asin": "B097G2B785",
+          "title": "The Valentine Wager (The Lange Brothers Book 1)",
+          "author": "Nan Reinhardt",
+          "genre": "Literature & Fiction",
+          "score": 0.20395077764987946
+        },
+        {
+          "parent_asin": "B0932LHN9V",
+          "title": "The Rancher Risks It All (The Tremaynes of Texas Book 2)",
+          "author": "Debra Holt",
+          "genre": "Romance",
+          "score": 0.19674775004386902
+        },
+        {
+          "parent_asin": "B00A3ZA598",
+          "title": "Not Quite Mine",
+          "author": "Catherine Bybee",
+          "genre": "Literature & Fiction",
+          "score": 0.19098399579524994
+        },
+        {
+          "parent_asin": "B01D8PYV7G",
+          "title": "Staying For Good (A Most Likely To Novel Book 2)",
+          "author": "Catherine Bybee",
+          "genre": "Literature & Fiction",
+          "score": 0.19081655144691467
+        },
+        {
+          "parent_asin": "B094VDG4JN",
+          "title": "The Bronc Rider Takes a Fall (The Tremaynes of Texas Book 3)",
+          "author": "Debra Holt",
+          "genre": "Romance",
+          "score": 0.18481233716011047
+        },
+        {
+          "parent_asin": "B09FSKFNZ3",
+          "title": "A Casterglass Garden (Keeping Up With the Penryns Book 2)",
+          "author": "Unknown author",
+          "genre": "Literature & Fiction",
+          "score": 0.1833088994026184
+        }
+      ]
+    },
+    {
+      "liked_asins": [
+        "B01B6E6OKI",
+        "B09S181LRM",
+        "B07CGJGDPZ"
+      ],
+      "model": "als",
+      "expected": [
+        {
+          "parent_asin": "B09MWL523K",
+          "title": "Finding Yesterday: A Rom Com Mystery (Blue Vine Book 1)",
+          "author": "Terra Weiss",
+          "genre": "Literature & Fiction",
+          "score": 0.7102720421814839
+        },
+        {
+          "parent_asin": "B09NV16YMD",
+          "title": "Between a Fox and a Hard Place: A Small Town Family Romance (Fox Family Book 1)",
+          "author": "Mary Frame",
+          "genre": "Literature & Fiction",
+          "score": 0.34729130219254706
+        },
+        {
+          "parent_asin": "B00T8RIK44",
+          "title": "Montana Cherries (The Wildes of Birch Bay Book 1)",
+          "author": "Kim Law",
+          "genre": "Literature & Fiction",
+          "score": 0.34549382452889743
+        },
+        {
+          "parent_asin": "B00O5EYHH4",
+          "title": "Treasured by Thursday (Weekday Brides Book 7)",
+          "author": "Catherine Bybee",
+          "genre": "Literature & Fiction",
+          "score": 0.2856820475979023
+        },
+        {
+          "parent_asin": "B0746L1VPK",
+          "title": "The Sometimes Sisters",
+          "author": "Carolyn Brown",
+          "genre": "Literature & Fiction",
+          "score": 0.2806080380106483
+        },
+        {
+          "parent_asin": "B01MPWF88C",
+          "title": "My Perfect Life at Cornish Cottage: A funny and feel-good romantic comedy",
+          "author": "S J Crabb",
+          "genre": "Literature & Fiction",
+          "score": 0.26681666930447795
+        },
+        {
+          "parent_asin": "B0883XJ9RX",
+          "title": "A Summer of Surprises",
+          "author": "Judith Keim",
+          "genre": "Literature & Fiction",
+          "score": 0.26341399616149785
+        },
+        {
+          "parent_asin": "B099QVG1H8",
+          "title": "$100M Offers: How To Make Offers So Good People Feel Stupid Saying No (Acquisition.com $100M Series Book 1)",
+          "author": "Alex Hormozi",
+          "genre": "Business & Money",
+          "score": 0.262264601638223
+        },
+        {
+          "parent_asin": "B084357H23",
+          "title": "The Invisible Life of Addie LaRue",
+          "author": "V. E. Schwab",
+          "genre": "Literature & Fiction",
+          "score": 0.2577203228054761
+        },
+        {
+          "parent_asin": "B09Z9LBHHS",
+          "title": "Crush in the Cascades: A Reality TV Romance (The Race for Riches or Romance Book 1)",
+          "author": "Lisa S. Gayle",
+          "genre": "Romance",
+          "score": 0.24803700000097711
+        }
+      ]
+    },
+    {
+      "liked_asins": [
+        "B096RXSMX8"
+      ],
+      "model": "popularity",
+      "expected": [
+        {
+          "parent_asin": "B09C6LW4XW",
+          "title": "The Perfect Marriage: A Completely Gripping Psychological Suspense",
+          "author": "Jeneva Rose",
+          "genre": "Literature & Fiction",
+          "score": 100.0
+        },
+        {
+          "parent_asin": "B09TWSRMCB",
+          "title": "The Housemaid: An absolutely addictive psychological thriller with a jaw-dropping twist",
+          "author": "Freida McFadden",
+          "genre": "Literature & Fiction",
+          "score": 99.0
+        },
+        {
+          "parent_asin": "B098PW8NP8",
+          "title": "Lessons in Chemistry: A Novel",
+          "author": "Bonnie Garmus",
+          "genre": "Literature & Fiction",
+          "score": 98.0
+        },
+        {
+          "parent_asin": "B09H6T8LTR",
+          "title": "Verity",
+          "author": "Colleen Hoover",
+          "genre": "Mystery, Thriller & Suspense",
+          "score": 97.0
+        },
+        {
+          "parent_asin": "B0976V6YSL",
+          "title": "Reminders of Him: A Novel",
+          "author": "Colleen Hoover",
+          "genre": "Literature & Fiction",
+          "score": 96.0
+        },
+        {
+          "parent_asin": "B09GFD7XCX",
+          "title": "Odin (Alex Mason Book 1)",
+          "author": "Blake Banner",
+          "genre": "Literature & Fiction",
+          "score": 95.0
+        },
+        {
+          "parent_asin": "B09PNM8FFN",
+          "title": "Things We Never Got Over (Knockemout Book 1)",
+          "author": "Lucy Score",
+          "genre": "Literature & Fiction",
+          "score": 94.0
+        },
+        {
+          "parent_asin": "B078GD3DRG",
+          "title": "Where the Crawdads Sing",
+          "author": "Delia Owens",
+          "genre": "Literature & Fiction",
+          "score": 93.0
+        },
+        {
+          "parent_asin": "B0176M3U10",
+          "title": "It Ends with Us: A Novel",
+          "author": "Colleen Hoover",
+          "genre": "Literature & Fiction",
+          "score": 92.0
+        },
+        {
+          "parent_asin": "B0B1XQTZ1R",
+          "title": "The Inmate: A gripping psychological thriller",
+          "author": "Unknown author",
+          "genre": "Literature & Fiction",
+          "score": 91.0
+        }
+      ]
+    },
+    {
+      "liked_asins": [
+        "B096RXSMX8"
+      ],
+      "model": "itemknn",
+      "expected": [
+        {
+          "parent_asin": "B0919V4MR9",
+          "title": "A Train to Moscow: A Novel",
+          "author": "Elena Gorokhova",
+          "genre": "Literature & Fiction",
+          "score": 0.04896083474159241
+        },
+        {
+          "parent_asin": "B094JM3PDB",
+          "title": "North to Paradise: A Memoir",
+          "author": "Ousman Umar",
+          "genre": "Biographies & Memoirs",
+          "score": 0.04818708822131157
+        },
+        {
+          "parent_asin": "B088FF4S7Q",
+          "title": "West with Giraffes: A Novel",
+          "author": "Lynda Rutledge",
+          "genre": "Literature & Fiction",
+          "score": 0.04401356726884842
+        },
+        {
+          "parent_asin": "B08ZWPKZG1",
+          "title": "A Day Like This: A Novel",
+          "author": "Kelley McNeil",
+          "genre": "Literature & Fiction",
+          "score": 0.04360673576593399
+        },
+        {
+          "parent_asin": "B08Z7HLLYM",
+          "title": "Murder at Teal's Pond: Hazel Drew and the Mystery That Inspired Twin Peaks",
+          "author": "David Bushman",
+          "genre": "Biographies & Memoirs",
+          "score": 0.04349282756447792
+        },
+        {
+          "parent_asin": "B08CDX7K66",
+          "title": "The Watcher Girl: A Thriller",
+          "author": "Minka Kent",
+          "genre": "Literature & Fiction",
+          "score": 0.04251151904463768
+        },
+        {
+          "parent_asin": "B08MBFC41Z",
+          "title": "The Second Life of Mirielle West: A Haunting Historical Novel Perfect for Book Clubs",
+          "author": "Amanda Skenandore",
+          "genre": "Literature & Fiction",
+          "score": 0.04228900372982025
+        },
+        {
+          "parent_asin": "B08ZLYTZC6",
+          "title": "Reasons for Avoiding Friends",
+          "author": "Olivia Miles",
+          "genre": "Literature & Fiction",
+          "score": 0.04140393063426018
+        },
+        {
+          "parent_asin": "B08VDKSZBW",
+          "title": "The Secret Next Door: A Novel",
+          "author": "Rebecca Taylor",
+          "genre": "Literature & Fiction",
+          "score": 0.04140393063426018
+        },
+        {
+          "parent_asin": "B09T971KPQ",
+          "title": "My Evil Mother: A Short Story",
+          "author": "Margaret Atwood",
+          "genre": "Literature & Fiction",
+          "score": 0.04081597551703453
+        }
+      ]
+    },
+    {
+      "liked_asins": [
+        "B096RXSMX8"
+      ],
+      "model": "als",
+      "expected": [
+        {
+          "parent_asin": "B09F9HK7RL",
+          "title": "American Seoul: A Memoir",
+          "author": "Helena Rho",
+          "genre": "Biographies & Memoirs",
+          "score": 0.12642424642599437
+        },
+        {
+          "parent_asin": "B0919V4MR9",
+          "title": "A Train to Moscow: A Novel",
+          "author": "Elena Gorokhova",
+          "genre": "Literature & Fiction",
+          "score": 0.12631465860212351
+        },
+        {
+          "parent_asin": "B094JM3PDB",
+          "title": "North to Paradise: A Memoir",
+          "author": "Ousman Umar",
+          "genre": "Biographies & Memoirs",
+          "score": 0.12611007388168508
+        },
+        {
+          "parent_asin": "B007MB5OCE",
+          "title": "The 100-Year-Old Man Who Climbed Out the Window and Disappeared",
+          "author": "Jonas Jonasson",
+          "genre": "Literature & Fiction",
+          "score": 0.10171804175771734
+        },
+        {
+          "parent_asin": "B09KXD3SXY",
+          "title": "Last Summer Boys: A Novel",
+          "author": "Bill Rivers",
+          "genre": "Literature & Fiction",
+          "score": 0.10057649521944491
+        },
+        {
+          "parent_asin": "B0976VRCV1",
+          "title": "The Community: A Memoir",
+          "author": "N. Jamiyla Chisholm",
+          "genre": "Biographies & Memoirs",
+          "score": 0.09723857674634201
+        },
+        {
+          "parent_asin": "B08ZWPKZG1",
+          "title": "A Day Like This: A Novel",
+          "author": "Kelley McNeil",
+          "genre": "Literature & Fiction",
+          "score": 0.09326130675296179
+        },
+        {
+          "parent_asin": "B07WG87YY3",
+          "title": "The Son and Heir: A Memoir",
+          "author": "Alexander Münninghoff",
+          "genre": "Biographies & Memoirs",
+          "score": 0.09214872797136234
+        },
+        {
+          "parent_asin": "B07NVD1276",
+          "title": "In an Instant",
+          "author": "Suzanne Redfearn",
+          "genre": "Literature & Fiction",
+          "score": 0.0900117072732997
+        },
+        {
+          "parent_asin": "B0841XZVL5",
+          "title": "A Borrowed Life: A Novel",
+          "author": "Kerry Anne King",
+          "genre": "Literature & Fiction",
+          "score": 0.08977335678417292
+        }
       ]
     }
   ]

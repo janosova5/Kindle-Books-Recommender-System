@@ -13,9 +13,14 @@ and wait about 30 seconds.)
    or switch on **Compare all models at once**.
 3. The 10 recommended books appear automatically below.
 
-**Note:** this is a demo version (v0.1.0). The catalog contains 30 fictional
-books and the recommendations come from a temporary placeholder backend
-(`recommender.py`), not from real trained models or Amazon data.
+The catalog contains the **30,000 most popular Kindle books** from the
+[Amazon Reviews'23](https://amazon-reviews-2023.github.io/) dataset.
+
+| Model | What it recommends |
+|---|---|
+| **Popularity** | The most popular books, without personalisation |
+| **ItemKNN** | Books similar to the ones you selected (item-item similarity) |
+| **ALS** | Personalised recommendations based on latent factors |
 
 ---
 
@@ -41,41 +46,33 @@ from the `main` branch of this repository. Every `git push` to `main`
 redeploys it automatically. If old results persist after a data or backend
 change, use **Manage app → ⋮ → Reboot app** in Streamlit Cloud.
 
-## Connecting real models later
+### How it fits together
 
-1. Replace the temporary `recommender.py` with the delivered, tested module:
-   `recommend(liked_asins: list[str], model: str, k: int = 10) -> list[dict]`.
-   Models have the keys `popularity`, `itemknn`, `als`. The backend returns books
-   in final order with `parent_asin`, `title`, `author`, `genre`, `score`.
-2. Replace the demo catalog and add the required item artifacts to `artifacts/`.
-   The catalog has `parent_asin` (or `ID`), `title`, `author`, `genre`.
-   IDs are unique strings. Add pinned dependencies as required by the backend.
-3. Replace `expected_outputs.json` with three real reference cases:
-   `{"cases": [{"liked_asins": ["..."], "model": "als", "expected": [...]}]}`.
-   `expected` contains complete dictionaries, not just identifiers.
-4. Restart the app so the caches are refreshed. A backend without the
-   `IS_DEMO = True` flag does not use the demo description in the optional
-   "About" expander. Models are registered centrally in
-   `app_service.MODELS`; the comparison uses all registered keys without changing
-   the number of columns in the UI. Verify the reference outputs and the warm
-   response time (target ~2 s).
-5. After final verification and public deployment, create a release/tag `v0.1.0`.
-   Make further changes in a separate branch only after evaluation.
+- `app.py` — the Streamlit user interface.
+- `app_service.py` — input validation, output checks and the popularity
+  fallback; it does not compute recommendations itself.
+- `recommender.py` — the trained models; `recommend(liked_asins, model, k=10)`
+  returns books with `parent_asin`, `title`, `author`, `genre`, `score`
+  (plus `rank` and `fallback`, which the app ignores except for showing a
+  fallback warning).
+- `artifacts/` — the model files exported from the training notebook:
+  `catalog.parquet`, `popularity.json`, `itemknn_sim.npz`,
+  `als_item_factors.npy`, `model_params.json` (hyperparameters and library
+  versions) and `expected_outputs.json` (the notebook's reference outputs).
+- `expected_outputs.json` (root) — the same 9 reference cases with full book
+  records; the tests check that the app returns exactly these.
 
-The app recommends only by calling `recommend()`; it does not model anything and
-does not recompute rankings or scores. An empty result or a failure of a
-personalised backend triggers `recommend(..., "popularity", k=10)` with a visible
-warning. Invalid outputs, selected/duplicate books and books outside the catalog
-are not presented as a success. If the backend returns fewer than 10 books,
-the UI says so.
+To update the models, re-export the files above from the notebook, keep the
+library versions in `requirements.txt` in sync with `model_params.json`, run
+the tests, and push to `main`.
 
 ## Data and limitations
 
-Currently synthetic books only. Future source:
-[Amazon Reviews'23, Kindle Store](https://amazon-reviews-2023.github.io/);
-approximately the 30 thousand most popular books, data up to September 2023,
-with both the selection and recommendations drawn only from the catalog.
+Source: [Amazon Reviews'23, Kindle Store](https://amazon-reviews-2023.github.io/).
+The models were trained on ratings before 2023-01-01; the catalog holds the
+30,000 most popular books, and both the selection and the recommendations come
+only from this catalog.
 
 `.gitignore` allows only specific required files. When adding further artifacts,
 add their exact paths to the allowlist. No raw reviews, user IDs, user factors,
-passwords or keys. No accounts, book covers, click tracking or A/B tests.
+passwords or keys are stored in the repository.

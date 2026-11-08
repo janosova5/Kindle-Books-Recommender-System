@@ -126,6 +126,12 @@ def recommend_books(
         warning = "Selected model failed. Showing fallback popularity recommendations."
     # Invalid output is a contract error, not a reason to hide a model bug.
     books = _check_books(books, selected)
+    # The backend may fall back to popularity itself and flag it per book.
+    if books and model != "popularity" and any(b.get("fallback") is True for b in books):
+        warning = warning or (
+            "Selected model could not recommend books. "
+            "Showing fallback popularity recommendations."
+        )
     if not books and model != "popularity":
         warning = warning or (
             "Selected model could not recommend books. "

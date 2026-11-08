@@ -134,3 +134,12 @@ def test_catalog_supports_id_column_and_missing_metadata(tmp_path):
     catalog = load_catalog(path)
     assert catalog.iloc[0]["parent_asin"] == "a"
     assert catalog.iloc[0]["author"] == ""
+
+
+def test_backend_flagged_fallback_shows_warning():
+    flagged = [{**book, "fallback": True} for book in books()]
+    result = recommend_books(["input"], "itemknn", Mock(return_value=flagged))
+    assert result.books == flagged
+    assert "fallback popularity" in result.warning
+    popular = recommend_books(["input"], "popularity", Mock(return_value=flagged))
+    assert popular.warning is None

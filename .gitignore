@@ -16,6 +16,7 @@
 !artifacts/als_item_factors.npy
 !artifacts/popularity.json
 !artifacts/model_params.json
+!artifacts/expected_outputs.json
 .venv/
 __pycache__/
 .pytest_cache/

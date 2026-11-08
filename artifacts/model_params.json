@@ -1,0 +1,21 @@
+{
+  "versions": {
+    "python": "3.11.18",
+    "numpy": "2.4.6",
+    "pandas": "3.1.1",
+    "scipy": "1.17.1",
+    "implicit": "0.7.3"
+  },
+  "trained_on": "ratings before 2023-01-01",
+  "n_items": 30000,
+  "itemknn": {
+    "k": 100,
+    "shrink": 0
+  },
+  "als": {
+    "factors": 1024,
+    "regularization": 1.0,
+    "alpha": 200,
+    "iterations": 15
+  }
+}

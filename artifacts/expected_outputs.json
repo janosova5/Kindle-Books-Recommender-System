@@ -1,0 +1,176 @@
+[
+  {
+    "liked": [
+      "B09C6LW4XW",
+      "B09TWSRMCB",
+      "B098PW8NP8"
+    ],
+    "model": "popularity",
+    "expected": [
+      "B09H6T8LTR",
+      "B0976V6YSL",
+      "B09GFD7XCX",
+      "B09PNM8FFN",
+      "B078GD3DRG",
+      "B0176M3U10",
+      "B0B1XQTZ1R",
+      "B07Q5TL9SQ",
+      "B07YBTCMPH",
+      "B07YL45VW2"
+    ]
+  },
+  {
+    "liked": [
+      "B09C6LW4XW",
+      "B09TWSRMCB",
+      "B098PW8NP8"
+    ],
+    "model": "itemknn",
+    "expected": [
+      "B0B1XQTZ1R",
+      "B09NGQ7BJ5",
+      "B092RXXJDM",
+      "B07YBTCMPH",
+      "B09CN5LBGK",
+      "B08NP5273Y",
+      "B089XYQ8SH",
+      "B085BWPVFC",
+      "B07FKT7W1S",
+      "B07MHGG3L3"
+    ]
+  },
+  {
+    "liked": [
+      "B09C6LW4XW",
+      "B09TWSRMCB",
+      "B098PW8NP8"
+    ],
+    "model": "als",
+    "expected": [
+      "B09DXWBKD7",
+      "B0B1XQTZ1R",
+      "B09NGQ7BJ5",
+      "B08NP5273Y",
+      "B0176M3XWQ",
+      "B092RXXJDM",
+      "B09VXXGZLP",
+      "B08RD8WFH9",
+      "B09H6T8LTR",
+      "B091MQ9XHN"
+    ]
+  },
+  {
+    "liked": [
+      "B01B6E6OKI",
+      "B09S181LRM",
+      "B07CGJGDPZ"
+    ],
+    "model": "popularity",
+    "expected": [
+      "B09C6LW4XW",
+      "B09TWSRMCB",
+      "B098PW8NP8",
+      "B09H6T8LTR",
+      "B0976V6YSL",
+      "B09GFD7XCX",
+      "B09PNM8FFN",
+      "B078GD3DRG",
+      "B0176M3U10",
+      "B0B1XQTZ1R"
+    ]
+  },
+  {
+    "liked": [
+      "B01B6E6OKI",
+      "B09S181LRM",
+      "B07CGJGDPZ"
+    ],
+    "model": "itemknn",
+    "expected": [
+      "B09MWL523K",
+      "B00K6NJZZ2",
+      "B099WCRF29",
+      "B074QNLKP9",
+      "B097G2B785",
+      "B0932LHN9V",
+      "B00A3ZA598",
+      "B01D8PYV7G",
+      "B094VDG4JN",
+      "B09FSKFNZ3"
+    ]
+  },
+  {
+    "liked": [
+      "B01B6E6OKI",
+      "B09S181LRM",
+      "B07CGJGDPZ"
+    ],
+    "model": "als",
+    "expected": [
+      "B09MWL523K",
+      "B09NV16YMD",
+      "B00T8RIK44",
+      "B00O5EYHH4",
+      "B0746L1VPK",
+      "B01MPWF88C",
+      "B0883XJ9RX",
+      "B099QVG1H8",
+      "B084357H23",
+      "B09Z9LBHHS"
+    ]
+  },
+  {
+    "liked": [
+      "B096RXSMX8"
+    ],
+    "model": "popularity",
+    "expected": [
+      "B09C6LW4XW",
+      "B09TWSRMCB",
+      "B098PW8NP8",
+      "B09H6T8LTR",
+      "B0976V6YSL",
+      "B09GFD7XCX",
+      "B09PNM8FFN",
+      "B078GD3DRG",
+      "B0176M3U10",
+      "B0B1XQTZ1R"
+    ]
+  },
+  {
+    "liked": [
+      "B096RXSMX8"
+    ],
+    "model": "itemknn",
+    "expected": [
+      "B0919V4MR9",
+      "B094JM3PDB",
+      "B088FF4S7Q",
+      "B08ZWPKZG1",
+      "B08Z7HLLYM",
+      "B08CDX7K66",
+      "B08MBFC41Z",
+      "B08ZLYTZC6",
+      "B08VDKSZBW",
+      "B09T971KPQ"
+    ]
+  },
+  {
+    "liked": [
+      "B096RXSMX8"
+    ],
+    "model": "als",
+    "expected": [
+      "B09F9HK7RL",
+      "B0919V4MR9",
+      "B094JM3PDB",
+      "B007MB5OCE",
+      "B09KXD3SXY",
+      "B0976VRCV1",
+      "B08ZWPKZG1",
+      "B07WG87YY3",
+      "B07NVD1276",
+      "B0841XZVL5"
+    ]
+  }
+]
