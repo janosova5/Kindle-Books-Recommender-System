@@ -73,7 +73,7 @@ the UI says so.
 
 Currently synthetic books only. Future source:
 [Amazon Reviews'23, Kindle Store](https://amazon-reviews-2023.github.io/);
-approximately the 20 thousand most popular books, data up to September 2023,
+approximately the 30 thousand most popular books, data up to September 2023,
 with both the selection and recommendations drawn only from the catalog.
 
 `.gitignore` allows only specific required files. When adding further artifacts,
