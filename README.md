@@ -8,10 +8,12 @@ and wait about 30 seconds.)
 
 ## How to use it
 
-1. Tick 1 to 10 books you like (you can search by title or author).
-2. Choose a recommendation model: **Popularity**, **ItemKNN** or **ALS** —
+1. Tick 1 to 10 books you like (you can search by title or author). They are
+   listed under **Your selection**, where you can remove them with ✕.
+2. Click **Confirm selection**.
+3. Choose a recommendation model: **Popularity**, **ItemKNN** or **ALS** —
    or switch on **Compare all models at once**.
-3. The 10 recommended books appear automatically below.
+4. Click **Get recommendations** to see the 10 recommended books.
 
 The catalog contains the **30,000 most popular Kindle books** from the
 [Amazon Reviews'23](https://amazon-reviews-2023.github.io/) dataset.

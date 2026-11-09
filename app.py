@@ -55,8 +55,11 @@ with st.expander("About"):
 
 if "selected" not in st.session_state:
     st.session_state.selected = []
+if "confirmed" not in st.session_state:
+    st.session_state.confirmed = False
 
 PAGE_SIZE = 12
+MAX_BOOKS = 10
 labels = dict(
     zip(catalog["parent_asin"], catalog["title"] + " — " + catalog["author"])
 )
@@ -65,53 +68,66 @@ labels = dict(
 def toggle_book(asin):
     selected = st.session_state.selected.copy()
     if st.session_state[f"book_{asin}"]:
-        if asin not in selected and len(selected) < 10:
+        if asin not in selected and len(selected) < MAX_BOOKS:
             selected.append(asin)
     elif asin in selected:
         selected.remove(asin)
     st.session_state.selected = selected
-    st.session_state.selection_widget = selected.copy()
 
 
-def remove_books():
-    st.session_state.selected = st.session_state.selection_widget.copy()
+def remove_book(asin):
+    st.session_state.selected = [
+        item for item in st.session_state.selected if item != asin
+    ]
+
+
+def clear_books():
+    st.session_state.selected = []
+
+
+def set_confirmed(value):
+    st.session_state.confirmed = value
+    st.session_state.pop("result", None)
 
 
 def change_page(offset):
     st.session_state.catalog_page += offset
 
 
-st.subheader("1. Your favourite books")
-query = st_keyup(
-    "Search by title or author",
-    max_chars=200,
-    debounce=250,
-    key="catalog_search",
-    placeholder="Title or author",
-)
-query = (query or "").strip()
-if query != st.session_state.get("catalog_query"):
-    st.session_state.catalog_query = query
-    st.session_state.catalog_page = 0
-matches = search_books(catalog, query, limit=None) if query else catalog
-page_count = max(1, (len(matches) + PAGE_SIZE - 1) // PAGE_SIZE)
-page = min(st.session_state.get("catalog_page", 0), page_count - 1)
-st.session_state.catalog_page = page
-
-if "selection_widget" not in st.session_state:
-    st.session_state.selection_widget = st.session_state.selected.copy()
-if st.session_state.selected:
-    st.multiselect(
-        "Selected books · click × to remove",
-        options=st.session_state.selected,
-        format_func=labels.get,
-        key="selection_widget",
-        on_change=remove_books,
-    )
 selection = st.session_state.selected.copy()
-st.caption(f"Selected: {len(selection)}/10 · Books: {len(matches)}")
+if not selection:
+    st.session_state.confirmed = False
+confirmed = st.session_state.confirmed
 
-st.html("""
+st.subheader("1. Your favourite books")
+
+if confirmed:
+    st.success(f"Selection confirmed: {len(selection)} book(s)")
+    for number, asin in enumerate(selection, 1):
+        st.markdown(f"{number}. {labels[asin]}")
+    st.button("← Edit selection", on_click=set_confirmed, args=(False,))
+else:
+    catalog_column, selection_column = st.columns([3, 2], gap="large")
+
+    with catalog_column:
+        query = st_keyup(
+            "Search by title or author",
+            max_chars=200,
+            debounce=250,
+            key="catalog_search",
+            placeholder="Title or author",
+        )
+        query = (query or "").strip()
+        if query != st.session_state.get("catalog_query"):
+            st.session_state.catalog_query = query
+            st.session_state.catalog_page = 0
+        matches = search_books(catalog, query, limit=None) if query else catalog
+        page_count = max(1, (len(matches) + PAGE_SIZE - 1) // PAGE_SIZE)
+        page = min(st.session_state.get("catalog_page", 0), page_count - 1)
+        st.session_state.catalog_page = page
+        st.caption(f"Books found: {len(matches)}")
+
+        st.html("""
 <style>
 [class*="st-key-catalog_even_"], [class*="st-key-catalog_odd_"] {
     padding: 0.35rem 0.75rem;
@@ -125,39 +141,70 @@ st.html("""
 }
 </style>
 """)
-if matches.empty:
-    st.info("No books found.")
-for index, book in enumerate(
-    matches.iloc[page * PAGE_SIZE : (page + 1) * PAGE_SIZE].to_dict("records")
-):
-    asin = book["parent_asin"]
-    key = f"book_{asin}"
-    # Hidden widgets are cleaned up by Streamlit; canonical selection survives.
-    st.session_state[key] = asin in selection
-    stripe = "even" if index % 2 == 0 else "odd"
-    with st.container(key=f"catalog_{stripe}_{index}"):
-        st.checkbox(
-            labels[asin],
-            key=key,
-            disabled=len(selection) >= 10 and asin not in selection,
-            on_change=toggle_book,
-            args=(asin,),
+        if matches.empty:
+            st.info("No books found.")
+        for index, book in enumerate(
+            matches.iloc[page * PAGE_SIZE : (page + 1) * PAGE_SIZE].to_dict("records")
+        ):
+            asin = book["parent_asin"]
+            key = f"book_{asin}"
+            # Hidden widgets are cleaned up by Streamlit; canonical selection survives.
+            st.session_state[key] = asin in selection
+            stripe = "even" if index % 2 == 0 else "odd"
+            with st.container(key=f"catalog_{stripe}_{index}"):
+                st.checkbox(
+                    labels[asin],
+                    key=key,
+                    disabled=len(selection) >= MAX_BOOKS and asin not in selection,
+                    on_change=toggle_book,
+                    args=(asin,),
+                )
+        if page_count > 1:
+            previous, position, following = st.columns([1, 2, 1])
+            previous.button(
+                "← Previous",
+                disabled=page == 0,
+                on_click=change_page,
+                args=(-1,),
+            )
+            position.caption(f"Page {page + 1}/{page_count}")
+            following.button(
+                "Next →",
+                disabled=page == page_count - 1,
+                on_click=change_page,
+                args=(1,),
+            )
+
+    with selection_column:
+        st.markdown(f"**Your selection ({len(selection)}/{MAX_BOOKS})**")
+        if not selection:
+            st.info("Select at least one book")
+        with st.container(border=True):
+            for asin in selection:
+                title_column, remove_column = st.columns([6, 1])
+                title_column.write(labels[asin])
+                remove_column.button(
+                    "✕",
+                    key=f"remove_{asin}",
+                    help="Remove from selection",
+                    on_click=remove_book,
+                    args=(asin,),
+                )
+            if not selection:
+                st.caption("Nothing selected yet.")
+        if selection:
+            st.button("Clear all", on_click=clear_books)
+        st.button(
+            f"Confirm selection ({len(selection)} books) →",
+            type="primary",
+            disabled=not selection,
+            on_click=set_confirmed,
+            args=(True,),
+            width="stretch",
         )
-if page_count > 1:
-    previous, position, following = st.columns([1, 2, 1])
-    previous.button(
-        "← Previous",
-        disabled=page == 0,
-        on_click=change_page,
-        args=(-1,),
-    )
-    position.caption(f"Page {page + 1}/{page_count}")
-    following.button(
-        "Next →",
-        disabled=page == page_count - 1,
-        on_click=change_page,
-        args=(1,),
-    )
+
+if not confirmed:
+    st.stop()
 
 st.subheader("2. Recommendation method")
 compare = st.toggle("Compare all models at once", value=False)
@@ -167,15 +214,11 @@ model = st.radio(
 )
 requested_models = tuple(MODELS) if compare else (model,)
 request_key = (tuple(selection), requested_models)
-stored = st.session_state.get("result")
 for requested_model in requested_models:
     name, description = MODELS[requested_model]
     st.caption(f"{name}: {description}")
 
-if not selection:
-    st.session_state.pop("result", None)
-    st.info("Select at least one book")
-elif not stored or stored[0] != request_key:
+if st.button("Get recommendations", type="primary"):
     st.session_state.pop("result", None)
     try:
         selected = validate_selection(selection, requested_models[0])
@@ -202,8 +245,10 @@ elif not stored or stored[0] != request_key:
         st.session_state.result = (request_key, outcomes)
 
 stored = st.session_state.get("result")
-if stored and stored[0] == request_key:
-    st.subheader("Books for you")
+if stored and stored[0] != request_key:
+    st.info("Settings changed. Click **Get recommendations** to update the results.")
+elif stored:
+    st.subheader("3. Books for you")
     panels = st.columns(len(requested_models)) if compare else [st.container()]
     for panel, requested_model in zip(panels, requested_models):
         with panel:
