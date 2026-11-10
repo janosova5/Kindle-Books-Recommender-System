@@ -33,6 +33,15 @@ def ui(monkeypatch):
     )
     monkeypatch.setattr(app_service, "load_catalog", lambda: catalog)
     monkeypatch.setattr(app_service, "get_backend", lambda: backend)
+
+    def search(text, limit=20):
+        text = text.strip().lower()
+        hits = catalog["title"].str.lower().str.contains(text, regex=False) | catalog[
+            "author"
+        ].str.lower().str.contains(text, regex=False)
+        return catalog[hits].head(limit).to_dict("records")
+
+    monkeypatch.setattr(app_service, "get_search", lambda: search)
     # AppTest cannot type in a third-party iframe. Replace only that boundary.
     monkeypatch.setattr(
         st_keyup,

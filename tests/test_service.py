@@ -104,26 +104,24 @@ def test_short_output_is_reported():
     assert "Only 2" in result.warning
 
 
-def test_search_by_title_author_and_literal_characters():
-    catalog = pd.DataFrame(
-        [
-            {"parent_asin": "a", "title": "A [Book]", "author": "Alice", "genre": ""},
-            {"parent_asin": "b", "title": "Another", "author": "BOB", "genre": ""},
-        ]
-    )
-    assert search_books(catalog, "book")["parent_asin"].tolist() == ["a"]
-    assert search_books(catalog, "bob")["parent_asin"].tolist() == ["b"]
-    assert search_books(catalog, "[")["parent_asin"].tolist() == ["a"]
-    assert search_books(catalog, " ").empty
-    assert search_books(catalog, "missing").empty
+def test_search_delegates_to_recommender_search():
+    search = Mock(return_value=[
+        {"parent_asin": "a", "title": "A [Book]", "author": "Alice", "genre": "",
+         "extra": 1},
+    ])
+    found = search_books(" book ", limit=None, search=search)
+    search.assert_called_once_with("book", limit=None)
+    assert found.to_dict("records") == [
+        {"parent_asin": "a", "title": "A [Book]", "author": "Alice", "genre": ""}
+    ]
+    assert search_books(" ", search=search).empty
+    assert search.call_count == 1
 
 
-def test_search_can_return_all_matches_for_pagination():
-    catalog = pd.DataFrame(
-        [{"title": f"Book {index}", "author": "Author"} for index in range(30)]
-    )
-    assert len(search_books(catalog, "book", limit=None)) == 30
-    assert len(search_books(catalog, "book")) == 20
+def test_search_uses_real_recommender_search():
+    found = search_books("hoover", limit=5)
+    assert 0 < len(found) <= 5
+    assert found["author"].str.lower().str.contains("hoover").any()
 
 
 def test_catalog_supports_id_column_and_missing_metadata(tmp_path):

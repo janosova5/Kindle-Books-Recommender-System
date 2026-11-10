@@ -1,2 +1,2 @@
+# All dependencies, including pytest, are pinned in requirements.txt.
 -r requirements.txt
-pytest==8.4.2

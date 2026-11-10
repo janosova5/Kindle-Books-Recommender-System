@@ -11,6 +11,7 @@ from app_service import (
     MODELS,
     backend_is_demo,
     get_backend,
+    get_search,
     load_catalog,
     recommend_books,
     search_books,
@@ -32,9 +33,15 @@ def cached_backend():
     return get_backend()
 
 
+@st.cache_resource(show_spinner=False)
+def cached_search():
+    return get_search()
+
+
 try:
     catalog = cached_catalog()
     backend = cached_backend()
+    search = cached_search()
     is_demo = backend_is_demo()
 except Exception:
     logging.getLogger(__name__).exception("Application initialization failed")
@@ -121,7 +128,11 @@ else:
         if query != st.session_state.get("catalog_query"):
             st.session_state.catalog_query = query
             st.session_state.catalog_page = 0
-        matches = search_books(catalog, query, limit=None) if query else catalog
+        if query:
+            matches = search_books(query, limit=len(catalog), search=search)
+            matches = matches[matches["parent_asin"].isin(labels)]
+        else:
+            matches = catalog
         page_count = max(1, (len(matches) + PAGE_SIZE - 1) // PAGE_SIZE)
         page = min(st.session_state.get("catalog_page", 0), page_count - 1)
         st.session_state.catalog_page = page

@@ -16,6 +16,7 @@ MODELS = {
     "als": ("ALS", "Personalised recommendations based on latent factors."),
 }
 Recommend = Callable[..., list[dict]]
+Search = Callable[..., list[dict]]
 LOGGER = logging.getLogger(__name__)
 
 
@@ -70,20 +71,23 @@ def load_catalog(path: Path = ROOT / "artifacts" / "catalog.parquet") -> pd.Data
 
 
 def search_books(
-    catalog: pd.DataFrame, query: str, limit: int | None = 20
+    query: str, limit: int | None = 20, search: Search | None = None
 ) -> pd.DataFrame:
+    """Search via recommender.search(text, limit) and return a DataFrame."""
     query = query.strip()
     if not query:
-        return catalog.iloc[:0]
-    matches = catalog["title"].str.contains(query, case=False, regex=False) | catalog[
-        "author"
-    ].str.contains(query, case=False, regex=False)
-    filtered = catalog.loc[matches]
-    return filtered if limit is None else filtered.head(limit)
+        return pd.DataFrame(columns=["parent_asin", "title", "author", "genre"])
+    search = search if search is not None else get_search()
+    found = search(query, limit=limit)
+    return pd.DataFrame(found, columns=["parent_asin", "title", "author", "genre"])
 
 
 def get_backend() -> Recommend:
     return import_module("recommender").recommend
+
+
+def get_search() -> Search:
+    return import_module("recommender").search
 
 
 def backend_is_demo() -> bool:

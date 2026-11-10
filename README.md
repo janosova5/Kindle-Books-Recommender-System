@@ -2,79 +2,63 @@
 
 **▶ Open the app: https://kindle-books-recommender-system.streamlit.app**
 
-Just open the link in any browser — nothing to install, no login needed.
-(If the app has been idle for a while, click **Yes, get this app back up!**
-and wait about 30 seconds.)
+A web app that recommends Kindle books to readers looking for their next
+read. It is a school project for the course *Modelling in Data Science*.
 
-## How to use it
+## What it does
 
-1. Tick 1 to 10 books you like (you can search by title or author). They are
-   listed under **Your selection**, where you can remove them with ✕.
+1. Select 1–10 books you like. You can search by title or author.
 2. Click **Confirm selection**.
-3. Choose a recommendation model: **Popularity**, **ItemKNN** or **ALS** —
-   or switch on **Compare all models at once**.
-4. Click **Get recommendations** to see the 10 recommended books.
-
-The catalog contains the **30,000 most popular Kindle books** from the
-[Amazon Reviews'23](https://amazon-reviews-2023.github.io/) dataset.
+3. Choose a model, or switch on **Compare all models at once**.
+4. Click **Get recommendations** to see **10 recommended books**.
 
 | Model | What it recommends |
 |---|---|
 | **Popularity** | The most popular books, without personalisation |
-| **ItemKNN** | Books similar to the ones you selected (item-item similarity) |
-| **ALS** | Personalised recommendations based on latent factors |
+| **ItemKNN** | Books similar to the ones you selected (item–item similarity, k = 100) |
+| **ALS** | Personalised recommendations from latent factors (1024 factors, λ = 1, α = 200) |
 
----
+If a model cannot score your selection, the app shows popular books instead
+and says so in a short note.
 
-## For developers
+## Models and data
 
-### Running locally
+- The models are trained on ratings from **Amazon Reviews'23, Kindle Store
+  (5-core)** given **before 2023**.
+- The catalog contains the **30,000 books with the most ratings in the last
+  12 months of the training period**. Both the selection and the
+  recommendations come only from this catalog.
+- Data source: [Amazon Reviews'23](https://amazon-reviews-2023.github.io)
+  (Hou et al., 2024). This repository contains only derived model files in
+  `artifacts/`, not the raw reviews.
 
-Requires Python 3.11–3.14. From the project folder:
+## Running locally
+
+Requires Python 3.11 or later.
 
 ```bash
-python3 -m venv .venv
-.venv/bin/pip install -r requirements-dev.txt     # Windows: .venv\Scripts\pip ...
-.venv/bin/streamlit run app.py                    # Windows: .venv\Scripts\streamlit ...
+pip install -r requirements.txt
+streamlit run app.py
 ```
 
-Then open `http://localhost:8501`. Run the tests with `.venv/bin/pytest -q`.
+Then open `http://localhost:8501`.
 
-### Updating the live app
+## Running the tests
 
-The live app is hosted for free on
-[Streamlit Community Cloud](https://share.streamlit.io/) and is built directly
-from the `main` branch of this repository. Every `git push` to `main`
-redeploys it automatically. If old results persist after a data or backend
-change, use **Manage app → ⋮ → Reboot app** in Streamlit Cloud.
+```bash
+pytest -q
+```
 
-### How it fits together
+## Project structure
 
-- `app.py` — the Streamlit user interface.
-- `app_service.py` — input validation, output checks and the popularity
-  fallback; it does not compute recommendations itself.
-- `recommender.py` — the trained models; `recommend(liked_asins, model, k=10)`
-  returns books with `parent_asin`, `title`, `author`, `genre`, `score`
-  (plus `rank` and `fallback`, which the app ignores except for showing a
-  fallback warning).
-- `artifacts/` — the model files exported from the training notebook:
-  `catalog.parquet`, `popularity.json`, `itemknn_sim.npz`,
-  `als_item_factors.npy`, `model_params.json` (hyperparameters and library
-  versions) and `expected_outputs.json` (the notebook's reference outputs).
-- `expected_outputs.json` (root) — the same 9 reference cases with full book
-  records; the tests check that the app returns exactly these.
+- `app.py`: the Streamlit user interface.
+- `app_service.py`: input validation and output checks. Recommendations
+  come only from `recommender.recommend(liked_asins, model, k)` and search
+  only from `recommender.search(text, limit)`.
+- `recommender.py`: loads the trained models and computes recommendations.
+- `artifacts/`: `catalog.parquet`, `popularity.json`, `itemknn_sim.npz`,
+  `als_item_factors.npy`, `model_params.json` and `expected_outputs.json`
+  (reference outputs from the training notebook, checked by the tests).
 
-To update the models, re-export the files above from the notebook, keep the
-library versions in `requirements.txt` in sync with `model_params.json`, run
-the tests, and push to `main`.
-
-## Data and limitations
-
-Source: [Amazon Reviews'23, Kindle Store](https://amazon-reviews-2023.github.io/).
-The models were trained on ratings before 2023-01-01; the catalog holds the
-30,000 most popular books, and both the selection and the recommendations come
-only from this catalog.
-
-`.gitignore` allows only specific required files. When adding further artifacts,
-add their exact paths to the allowlist. No raw reviews, user IDs, user factors,
-passwords or keys are stored in the repository.
+The live app is hosted on Streamlit Community Cloud and redeploys
+automatically after each push to `main`.

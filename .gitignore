@@ -1,4 +1,4 @@
-# Allowlist: no raw data, reviews, user IDs, credentials, or model exports elsewhere.
+# Allowlist: only the files listed below are tracked.
 *
 !*/
 !.gitignore
@@ -11,15 +11,30 @@
 !.streamlit/config.toml
 !expected_outputs.json
 !tests/test_*.py
+
+# Model artifacts (derived files only)
 !artifacts/catalog.parquet
 !artifacts/itemknn_sim.npz
 !artifacts/als_item_factors.npy
 !artifacts/popularity.json
 !artifacts/model_params.json
 !artifacts/expected_outputs.json
+
+# Raw data and caches: never commit
+data/
+cache/
+*.jsonl
+*.jsonl.gz
+*.csv
+*.csv.gz
 .venv/
 __pycache__/
 .pytest_cache/
+.DS_Store
+
+# Secrets: never commit
 .streamlit/secrets.toml
 .env
 .env.*
+*.pem
+*.key

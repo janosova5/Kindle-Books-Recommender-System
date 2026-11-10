@@ -7,32 +7,33 @@ import numpy as np
 import pandas as pd
 import scipy.sparse as sp
 
-ART = Path(__file__).resolve().parent / "artifacts"
+ARTIFACTS = Path(__file__).resolve().parent / "artifacts"
 MODELS = ("popularity", "itemknn", "als")
 MAX_LIKED = 10
 
 
 @lru_cache(maxsize=1)
 def _load():
-    cat = pd.read_parquet(ART / "catalog.parquet")
-    cat = cat.fillna({"title": "Unknown title", "author": "Unknown author", "genre": "Unknown genre"})
-    params = json.loads((ART / "model_params.json").read_text())
-    pop = json.loads((ART / "popularity.json").read_text())
-    sim = sp.load_npz(ART / "itemknn_sim.npz").tocsr()
-    Y = np.load(ART / "als_item_factors.npy").astype(np.float64)
-    index = {a: i for i, a in enumerate(cat["parent_asin"])}
-    return cat, params, pop, sim, Y, index
+    """Load the catalogue and the trained models once (later calls reuse them)."""
+    catalog = pd.read_parquet(ARTIFACTS / "catalog.parquet")
+    catalog = catalog.fillna({"title": "Unknown title", "author": "Unknown author", "genre": "Unknown genre"})
+    params = json.loads((ARTIFACTS / "model_params.json").read_text())
+    popular_books = json.loads((ARTIFACTS / "popularity.json").read_text())        # book IDs, most popular first
+    similarity = sp.load_npz(ARTIFACTS / "itemknn_sim.npz").tocsr()               # ItemKNN: book x book
+    book_vectors = np.load(ARTIFACTS / "als_item_factors.npy").astype(np.float64)  # ALS: book x factors
+    position_of = {book_id: pos for pos, book_id in enumerate(catalog["parent_asin"])}
+    return catalog, params, popular_books, similarity, book_vectors, position_of
 
 
 def search(text, limit=20):
     """Books whose title or author contains the text (case-insensitive)."""
-    cat = _load()[0]
-    t = str(text).strip().lower()
-    if not t:
+    catalog = _load()[0]
+    query = str(text).strip().lower()
+    if not query:
         return []
-    hit = cat["title"].fillna("").str.lower().str.contains(t, regex=False) | \
-          cat["author"].fillna("").str.lower().str.contains(t, regex=False)
-    return cat[hit].head(limit).to_dict("records")
+    matches = (catalog["title"].str.lower().str.contains(query, regex=False)
+               | catalog["author"].str.lower().str.contains(query, regex=False))
+    return catalog[matches].head(limit).to_dict("records")
 
 
 def recommend(liked_asins, model="als", k=10):
@@ -41,49 +42,59 @@ def recommend(liked_asins, model="als", k=10):
     Raises ValueError for an unknown model, an empty or too long selection, or books not in the catalogue.
     If a model cannot score any book, the most popular books are returned with fallback=True.
     """
+    # 1. check the inputs
     if model not in MODELS:
         raise ValueError(f"Unknown model '{model}'. Choose one of {MODELS}.")
     if not isinstance(k, int) or not 1 <= k <= 50:
         raise ValueError("k must be an integer between 1 and 50.")
-    cat, params, pop, sim, Y, index = _load()
-    liked = list(dict.fromkeys(liked_asins or []))          # remove duplicates, keep order
+    catalog, params, popular_books, similarity, book_vectors, position_of = _load()
+    liked = list(dict.fromkeys(liked_asins or []))                  # remove duplicates, keep order
     if not liked:
         raise ValueError("Select at least one book.")
     if len(liked) > MAX_LIKED:
         raise ValueError(f"Select at most {MAX_LIKED} books.")
-    unknown = [a for a in liked if a not in index]
+    unknown = [book_id for book_id in liked if book_id not in position_of]
     if unknown:
         raise ValueError(f"Books not in the catalogue: {unknown}")
-    li = np.array([index[a] for a in liked])
+    liked_pos = np.array([position_of[book_id] for book_id in liked])
 
+    # 2. score all catalogue books with the chosen model
     scores = None
     if model == "itemknn":
-        s = np.asarray(sim[li].sum(axis=0)).ravel().astype(np.float64)
-        scores = s if (s > 0).any() else None
+        # sum of similarities to the liked books
+        knn_scores = np.asarray(similarity[liked_pos].sum(axis=0)).ravel().astype(np.float64)
+        scores = knn_scores if (knn_scores > 0).any() else None
     elif model == "als":
-        lam, alpha = params["als"]["regularization"], params["als"]["alpha"]
-        A = Y.T @ Y + lam * np.eye(Y.shape[1]) + (alpha - 1) * Y[li].T @ Y[li]
-        u = np.linalg.solve(A, alpha * Y[li].sum(axis=0))
-        scores = Y @ u
+        # vector of the new user: the same ridge regression step that ALS solves for every user
+        regularization, alpha = params["als"]["regularization"], params["als"]["alpha"]
+        liked_vectors = book_vectors[liked_pos]
+        system_matrix = (book_vectors.T @ book_vectors + regularization * np.eye(book_vectors.shape[1])
+                         + (alpha - 1) * liked_vectors.T @ liked_vectors)
+        user_vector = np.linalg.solve(system_matrix, alpha * liked_vectors.sum(axis=0))
+        scores = book_vectors @ user_vector
 
+    # 3. order the books: by score, or by popularity if there is no score
     fallback = scores is None and model != "popularity"
     if scores is None:
-        order = [index[a] for a in pop]
-        score_of = {i: float(len(pop) - r) for r, i in enumerate(order)}
+        order = [position_of[book_id] for book_id in popular_books]
+        popularity_score = {pos: float(len(popular_books) - rank) for rank, pos in enumerate(order)}
     else:
-        scores[li] = -np.inf
-        order = np.argsort(-scores, kind="stable")
-        score_of = None
-    liked_set = set(li.tolist())
-    out = []
-    for i in order:
-        i = int(i)
-        if i in liked_set:
+        scores[liked_pos] = -np.inf                                  # never recommend the liked books
+        order = np.argsort(-scores, kind="stable")                   # stable = same order for equal scores
+        popularity_score = None
+
+    # 4. build the list of the top k books
+    liked_set = set(liked_pos.tolist())
+    recommendations = []
+    for pos in order:
+        pos = int(pos)
+        if pos in liked_set:
             continue
-        row = cat.iloc[i]
-        out.append({"rank": len(out) + 1, "parent_asin": row["parent_asin"], "title": row["title"],
-                    "author": row["author"], "genre": row["genre"],
-                    "score": score_of[i] if score_of else float(scores[i]), "fallback": fallback})
-        if len(out) == k:
+        book = catalog.iloc[pos]
+        recommendations.append({
+            "rank": len(recommendations) + 1, "parent_asin": book["parent_asin"], "title": book["title"],
+            "author": book["author"], "genre": book["genre"],
+            "score": popularity_score[pos] if popularity_score else float(scores[pos]), "fallback": fallback})
+        if len(recommendations) == k:
             break
-    return out
+    return recommendations
